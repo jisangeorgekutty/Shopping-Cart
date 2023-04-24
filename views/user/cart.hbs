@@ -1,0 +1,26 @@
+<section>
+    <div class="container">
+        <table class="table mt-6">
+            <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Quantity</th>
+                <tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+                    <td><img src="/product-image/{{this._id}}.jpg" alt="" style="height: 50px; width: 50px;"></td>
+                    <td>{{this.Nameame}}</td>
+                    <td><button class="btn-primary cart-item-count mr-3"
+                            style="height: 2rem; width: 2rem;">-</button>1<button
+                            class="btn-primary cart-item-count ml-3" style="height: 2rem; width: 2rem;">+</button>
+                    </td>
+                    <td><a href="" class="btn btn-danger">Remove</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
