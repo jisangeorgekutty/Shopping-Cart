@@ -5,24 +5,71 @@
                 <tr>
                     <th scope="col">Item</th>
                     <th scope="col">Title</th>
+                    <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                 <tr>
             </thead>
             <tbody>
                 {{#each products}}
                 <tr>
-                    {{#each this.product}}
-                    <td><img src="/product-image/{{this._id}}.jpg" alt="" style="height: 50px; width: 50px;"></td>
-                    <td>{{this.Name}}</td>
-                    {{/each}}
-                    <td><button class="btn-primary cart-item-count mr-3"
-                            style="height: 2rem; width: 2rem;">-</button>{{this.quantity}}<button
-                            class="btn-primary cart-item-count ml-3" style="height: 2rem; width: 2rem;">+</button>
+                    <td><img src="/product-image/{{this.product._id}}.jpg" alt="" style="height: 50px; width: 50px;">
                     </td>
-                    <td><a href="" class="btn btn-danger">Remove</a></td>
+                    <td>{{this.product.Name}}</td>
+                    <td>{{this.product.Price}}</td>
+                    <td><button class="btn-primary cart-item-count mr-3" style="height: 2rem; width: 2rem;"
+                            onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button><span
+                            id="{{this.product._id}}">{{this.quantity}}</span><button
+                            class="btn-primary cart-item-count ml-3" style="height: 2rem; width: 2rem;"
+                            onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+                    </td>
+                    <td><a href="" class="btn btn-danger"
+                            onclick="removeProduct('{{this._id}}','{{this.product._id}}')">Remove</a></td>
                 </tr>
                 {{/each}}
-            </tbody>
         </table>
     </div>
 </section>
+
+
+<script>
+    function changeQuantity(cartId, productId, count) {
+        let quantity = parseInt(document.getElementById(productId).innerHTML)
+        count = parseInt(count)
+        $.ajax({
+            url: '/change-quantity',
+            data: {
+                cart: cartId,
+                product: productId,
+                count: count,
+                quantity: quantity
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.removeProduct) {
+                    alert("Product Removed")
+                    location.reload()
+                } else {
+                    document.getElementById(productId).innerHTML = quantity + count
+                }
+            }
+
+
+        })
+    }
+
+
+    function removeProduct(cartId, productId) {
+        $.ajax({
+            url: '/remove-product',
+            data: {
+                cart: cartId,
+                product: productId
+            },
+            method: 'post',
+            success: (response) => {
+                alert("Product Removed")
+            }
+
+        })
+    }
+</script>
