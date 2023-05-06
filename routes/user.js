@@ -90,3 +90,7 @@ router.post('/remove-product', (req, res, next) => {
 })
 module.exports = router;
 
+router.get('/place-order', varifyLogin, async (req, res) => {
+  let total = await userHelper.placeOrder(req.session.user._id)
+  res.render('user/place-order', { total })
+})

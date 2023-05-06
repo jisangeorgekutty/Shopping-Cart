@@ -150,5 +150,48 @@ module.exports = {
 
                 })
         })
+    },
+
+    placeOrder: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let total = await db.get().collection(collections.CART_COLLECTION).aggregate([
+                {
+                    $match: {
+                        user: new objectId(userId)
+                    }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $project: {
+                        item: '$products.item',
+                        quantity: '$products.quantity'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: collections.PRODUCT_COLLECION,
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                },
+                {
+                    $project: {
+                        item: 1,
+                        quantity: 1,
+                        product: { $arrayElemAt: ['$product', 0] }
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        total: { $sum: { $multiply: ['$quantity', { $toInt: '$product.Price' }] } }
+                    }
+                }
+            ]).toArray()
+            resolve(total[0].total)
+        })
     }
 }
