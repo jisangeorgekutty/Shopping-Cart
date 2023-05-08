@@ -68,7 +68,8 @@ router.get('/logout', (req, res) => {
 
 router.get('/show-cart', varifyLogin, async (req, res) => {
   let products = await userHelper.getCartProducts(req.session.user._id)
-  res.render('user/cart', { products })
+  let total = await userHelper.placeOrder(req.session.user._id)
+  res.render('user/cart', { products, user: req.session.user, total })
 })
 
 router.get('/add-to-cart/:id', (req, res) => {
@@ -79,7 +80,8 @@ router.get('/add-to-cart/:id', (req, res) => {
 })
 
 router.post('/change-quantity', (req, res, next) => {
-  userHelper.changeProductCount(req.body).then((response) => {
+  userHelper.changeProductCount(req.body).then(async (response) => {
+    response.total = await userHelper.placeOrder(req.body.user)
     res.json(response)
   })
 })
@@ -92,5 +94,5 @@ module.exports = router;
 
 router.get('/place-order', varifyLogin, async (req, res) => {
   let total = await userHelper.placeOrder(req.session.user._id)
-  res.render('user/place-order', { total })
+  res.render('user/place-order', { user: req.session.user, total })
 })
