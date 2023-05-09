@@ -45,8 +45,8 @@ module.exports = {
         }
         return new Promise(async (resolve, reject) => {
             let userCart = await db.get().collection(collections.CART_COLLECTION).findOne({ user: new objectId(userId) })
-            let proExist = userCart.products.findIndex(product => product.item == productId)
             if (userCart) {
+                let proExist = userCart.products.findIndex(product => product.item == productId)
                 if (proExist != -1) {
                     db.get().collection(collections.CART_COLLECTION).updateOne({ user: new objectId(userId) }, { 'products.item': new objectId(productId) },
                         {

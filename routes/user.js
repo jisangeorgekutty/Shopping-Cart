@@ -67,12 +67,19 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/show-cart', varifyLogin, async (req, res) => {
-  let products = await userHelper.getCartProducts(req.session.user._id)
-  let total = await userHelper.placeOrder(req.session.user._id)
+  let products = null;
+  let total = 0;
+  let user = req.session.user;
+  if (user) {
+    products = await userHelper.getCartProducts(req.session.user._id)
+    total = await userHelper.placeOrder(req.session.user._id)
+  } else {
+    res.redirect('/login')
+  }
   res.render('user/cart', { products, user: req.session.user, total })
 })
 
-router.get('/add-to-cart/:id', (req, res) => {
+router.get('/add-to-cart/:id', varifyLogin, (req, res) => {
   userHelper.addCart(req.params.id, req.session.user._id).then(() => {
     res.json({ status: true })
   })
