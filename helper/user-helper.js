@@ -223,6 +223,12 @@ module.exports = {
             let cart = await db.get().collection(collections.CART_COLLECTION).findOne({ user: new objectId(userId) })
             resolve(cart.products)
         })
+    },
+    getAllOrderProducts: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let products = await db.get().collection(collections.ORDER_COLLECTION).find({ user: new objectId(userId) }).toArray()
+            resolve(products)
+        })
     }
 
 

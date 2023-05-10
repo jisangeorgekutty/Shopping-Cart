@@ -4,6 +4,7 @@ var router = express.Router();
 var productHelper = require('../helper/product-helper')
 var userHelper = require('../helper/user-helper');
 const async = require('hbs/lib/async');
+const { resolve } = require('promise');
 
 const varifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
@@ -110,6 +111,7 @@ router.get('/place-order', varifyLogin, async (req, res) => {
 router.post('/place-order', async (req, res) => {
   let totalValue = await userHelper.placeOrder(req.body.userId)
   let products = await userHelper.getCartProductList(req.body.userId)
+  // let userId = req.body.userId;
   userHelper.placeOrderProduct(req.body, totalValue, products).then((response) => {
     res.json({ status: true })
   })
@@ -117,4 +119,12 @@ router.post('/place-order', async (req, res) => {
 
 router.get('/order-successful', (req, res) => {
   res.render('user/order-successful')
+})
+
+router.get('/show-order', varifyLogin, async (req, res) => {
+  let user = req.session.user._id;
+  console.log(user)
+  let orderProducts = await userHelper.getAllOrderProducts(user)
+  console.log(orderProducts)
+  res.render('user/order', { orderProducts })
 })
