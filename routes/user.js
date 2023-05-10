@@ -114,3 +114,7 @@ router.post('/place-order', async (req, res) => {
     res.json({ status: true })
   })
 })
+
+router.get('/order-successful', (req, res) => {
+  res.render('user/order-successful')
+})

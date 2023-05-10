@@ -53,8 +53,9 @@
             method: 'post',
             data: $('#checkout-form').serialize(),
             success: (response) => {
-                if (response) {
+                if (response.status) {
                     alert('Order Placed')
+                    location.href = '/order-successful'
                 }
             }
         })
