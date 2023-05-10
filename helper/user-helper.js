@@ -193,5 +193,38 @@ module.exports = {
             ]).toArray()
             resolve(total[0].total)
         })
+    },
+    placeOrderProduct: (order, total, products) => {
+        return new Promise((resolve, reject) => {
+            console.log(order, total, products)
+            let status = order['payment-method'] === 'cod' ? 'placed' : 'pending'
+            let orderObj = {
+                deliveryDetails: {
+                    address: order.address,
+                    mobile: order.mobile,
+                    pincode: order.pincode
+                },
+                user: new objectId(order.userId),
+                paymentMethod: order['payment-method'],
+                status: status,
+                totalValue: total,
+                products: products,
+                date: new Date()
+            }
+
+            db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
+                db.get().collection(collections.CART_COLLECTION).deleteOne({ user: new objectId(order.userId) })
+                resolve()
+            })
+        })
+    },
+    getCartProductList: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let cart = await db.get().collection(collections.CART_COLLECTION).findOne({ user: new objectId(userId) })
+            resolve(cart.products)
+        })
     }
+
+
+
 }

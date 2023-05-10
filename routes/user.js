@@ -106,3 +106,11 @@ router.get('/place-order', varifyLogin, async (req, res) => {
   let total = await userHelper.placeOrder(req.session.user._id)
   res.render('user/place-order', { user: req.session.user, total })
 })
+
+router.post('/place-order', async (req, res) => {
+  let totalValue = await userHelper.placeOrder(req.body.userId)
+  let products = await userHelper.getCartProductList(req.body.userId)
+  userHelper.placeOrderProduct(req.body, totalValue, products).then((response) => {
+    res.json({ status: true })
+  })
+})

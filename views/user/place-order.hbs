@@ -1,8 +1,8 @@
 <section>
     <div class="container mt-5">
-        <div class="left-side">
-            <form>
-                <h1>Enter Delivery Details</h1>
+        <form id="checkout-form">
+            <h1>Enter Delivery Details</h1>
+            <div class="left-side">
                 <div class="form-group">
                     <label for="inputAddress">Address</label>
                     <input type="text" class="form-control" id="inputAddress" style="height: 2cm;" name="address">
@@ -15,33 +15,48 @@
                     <label for="inputMobile">Mobile</label>
                     <input type="text" class="form-control" id="inputMobile" name="mobile">
                 </div>
-
-            </form>
-        </div>
-        <div class="right-side mt-3">
-            <div class="card border-dark mb-3 float-right" style="width: 25rem; height: 15rem;">
-                <div class="card-header">
-                    <h3>Total Amount: ${{total}}</h3>
-                </div>
-                <div class="card-body text-dark">
-                    <h6 class="card-title">Payment method>-</h6>
-                    <div class="mt-3">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                                value="option1" name="cod">
-                            <label class="form-check-label" for="inlineRadio1">Cash on Delivery</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                                value="option1" name="online-payment">
-                            <label class="form-check-label" for="inlineRadio1">Online Payment</label>
-                        </div>
+                <input type="text" name="userId" value="{{user._id}}" hidden>
+            </div>
+            <div class="right-side mt-3">
+                <div class="card border-dark mb-3 float-right" style="width: 25rem; height: 15rem;">
+                    <div class="card-header">
+                        <h3>Total Amount: ${{total}}</h3>
                     </div>
-                    <div class="btn-div">
-                        <button type="submit" class="btn btn-primary float-right mt-5">Checkout</button>
+                    <div class="card-body text-dark">
+                        <h6 class="card-title">Payment method>-</h6>
+                        <div class="mt-3">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="inlineRadio1" value="cod"
+                                    name="payment-method">
+                                <label class="form-check-label" for="inlineRadio1">Cash on Delivery</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="inlineRadio1" value="online-payment"
+                                    name="payment-method">
+                                <label class="form-check-label" for="inlineRadio1">Online Payment</label>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-primary float-right mt-5">Checkout</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </section>
+<script>
+    $("#checkout-form").submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/place-order',
+            method: 'post',
+            data: $('#checkout-form').serialize(),
+            success: (response) => {
+                if (response) {
+                    alert('Order Placed')
+                }
+            }
+        })
+    })
+</script>
