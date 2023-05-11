@@ -118,13 +118,18 @@ router.post('/place-order', async (req, res) => {
 })
 
 router.get('/order-successful', (req, res) => {
-  res.render('user/order-successful')
+  res.render('user/order-successful', { user: req.session.user })
 })
 
 router.get('/show-order', varifyLogin, async (req, res) => {
   let user = req.session.user._id;
-  console.log(user)
+  let order = await userHelper.getAllOrder(user)
+  res.render('user/order', { order, user: req.session.user })
+})
+
+router.get('/view-order-products/:id', async (req, res) => {
+  let user = req.params.id;
   let orderProducts = await userHelper.getAllOrderProducts(user)
   console.log(orderProducts)
-  res.render('user/order', { orderProducts })
+  res.render('user/show-order-products', { orderProducts, user: req.session.user })
 })

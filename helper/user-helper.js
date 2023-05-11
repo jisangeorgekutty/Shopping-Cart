@@ -224,12 +224,49 @@ module.exports = {
             resolve(cart.products)
         })
     },
-    getAllOrderProducts: (userId) => {
+    getAllOrder: (userId) => {
         return new Promise(async (resolve, reject) => {
             let products = await db.get().collection(collections.ORDER_COLLECTION).find({ user: new objectId(userId) }).toArray()
             resolve(products)
         })
+    },
+    getAllOrderProducts: (orderId) => {
+        return new Promise(async (resolve, reject) => {
+            let orderItems = await db.get().collection(collections.ORDER_COLLECTION).aggregate([
+                {
+                    $match: {
+                        _id: new objectId(orderId)
+                    }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $project: {
+                        item: '$products.item',
+                        quantity: '$products.quantity'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: collections.PRODUCT_COLLECION,
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                },
+                {
+                    $project: {
+                        item: 1,
+                        quantity: 1,
+                        product: { $arrayElemAt: ['$product', 0] }
+                    }
+                }
+            ]).toArray()
+            resolve(orderItems)
+        })
     }
+
 
 
 

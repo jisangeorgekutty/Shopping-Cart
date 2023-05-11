@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                {{#each orderProducts}}
+                {{#each order}}
                 <tr>
                     <td>{{this.date}}</td>
                     <td>{{this.deliveryDetails.address}}</td>
@@ -22,7 +22,8 @@
                     <td>{{this.totalValue}}</td>
                     <td>{{this.paymentMethod}}</td>
                     <td>{{this.status}}</td>
-                    <td><a class="btn btn-primary" style="color: white;">view products</a></td>
+                    <td><a href="/view-order-products/{{this._id}}" class="btn btn-primary" style="color: white;">view
+                            products</a></td>
                 </tr>
                 {{/each}}
             </tbody>
