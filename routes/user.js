@@ -6,6 +6,7 @@ var userHelper = require('../helper/user-helper');
 const async = require('hbs/lib/async');
 const { resolve } = require('promise');
 
+
 const varifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
     next()
@@ -112,8 +113,14 @@ router.post('/place-order', async (req, res) => {
   let totalValue = await userHelper.placeOrder(req.body.userId)
   let products = await userHelper.getCartProductList(req.body.userId)
   // let userId = req.body.userId;
-  userHelper.placeOrderProduct(req.body, totalValue, products).then((response) => {
-    res.json({ status: true })
+  userHelper.placeOrderProduct(req.body, totalValue, products).then((orderId) => {
+    if (req.body['payment-method'] === 'cod') {
+      res.json({ codSuccess: true })
+    } else {
+      userHelper.generateRazorpay(orderId, totalValue).then((response) => {
+        res.json(response)
+      })
+    }
   })
 })
 
@@ -132,4 +139,8 @@ router.get('/view-order-products/:id', async (req, res) => {
   let orderProducts = await userHelper.getAllOrderProducts(user)
   console.log(orderProducts)
   res.render('user/show-order-products', { orderProducts, user: req.session.user })
+})
+
+router.post('/verify-payment', (req, res) => {
+  console.log(req.body)
 })
