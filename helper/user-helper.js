@@ -6,7 +6,8 @@ const async = require('hbs/lib/async');
 const { response } = require('express');
 const { ObjectId } = require('mongodb');
 var objectId = require('mongodb').ObjectId
-var Razorpay = require('razorpay')
+var Razorpay = require('razorpay');
+const { use } = require('bcrypt/promises');
 
 var instance = new Razorpay({
     key_id: 'rzp_test_kJb7IEObC39O4O',
@@ -24,6 +25,7 @@ module.exports = {
     },
 
     doLogin: (userData) => {
+        console.log(userData)
         return new Promise(async (resolve, reject) => {
             let loginStatus = false;
             let response = {}
@@ -38,6 +40,9 @@ module.exports = {
                         resolve({ status: false })
                     }
                 })
+            } else if (userData.Email == "admin@gmail.com" && userData.Password == 'admin123') {
+                response.adminStatus = true;
+                resolve(response)
             } else {
                 resolve({ status: false })
             }
@@ -289,8 +294,6 @@ module.exports = {
             });
         })
     }
-
-
 
 
 }

@@ -8,7 +8,7 @@ const { resolve } = require('promise');
 
 
 const varifyLogin = (req, res, next) => {
-  if (req.session.loggedIn) {
+  if (req.session.userloggedIn) {
     next()
   } else {
     res.redirect('/login')
@@ -33,17 +33,17 @@ router.get('/signup', (req, res) => {
 
 
 router.get('/login', (req, res) => {
-  if (req.session.loggedIn) {
+  if (req.session.userloggedIn) {
     res.redirect('/')
   } else {
-    res.render('user/login', { "loginErr": req.session.loginErr })
-    req.session.loginErr = false
+    res.render('user/login', { "loginErr": req.session.userloginErr })
+    req.session.userloginErr = false
   }
 })
 
 router.post('/signupaction', (req, res) => {
   userHelper.doSignup(req.body).then((response) => {
-    req.session.loggedIn = true
+    req.session.userloggedIn = true
     req.session.user = response
     res.redirect('/')
   })
@@ -51,12 +51,15 @@ router.post('/signupaction', (req, res) => {
 
 router.post('/loginaction', (req, res) => {
   userHelper.doLogin(req.body).then((response) => {
+    console.log(req.body)
     if (response.status) {
-      req.session.loggedIn = true
+      req.session.userloggedIn = true
       req.session.user = response.user
       res.redirect('/')
+    } else if (response.adminStatus) {
+      res.redirect('/admin')
     } else {
-      req.session.loginErr = true;
+      req.session.userloginErr = true;
       res.redirect('/login')
     }
   })
@@ -142,5 +145,5 @@ router.get('/view-order-products/:id', async (req, res) => {
 })
 
 router.post('/verify-payment', (req, res) => {
-  console.log(req.body)
+  console.log("IDDD" + req.body)
 })

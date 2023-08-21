@@ -3,7 +3,7 @@
         <div class="container mt-5 pl-5">
             <form action="/loginaction" method="post">
                 <div class="form-group">
-                    {{#if loginErr}}
+                    {{#if userloginErr}}
                     <p class="err">Invalid Email or Password</p>
                     {{/if}}
                     <label for="exampleInputEmail1">Email address</label>

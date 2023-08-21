@@ -1,15 +1,27 @@
 const { response } = require('express');
 var express = require('express');
 var router = express.Router();
-var productHelper = require('../helper/product-helper')
+var productHelper = require('../helper/product-helper');
+const userHelper = require('../helper/user-helper');
+const { resolve } = require('promise');
 
 
-/* GET users listing. */
+/* GET users listing .*/
+
+// const varifyAdminLogin = (req, res, next) => {
+//   if (req.session.adminloggedIn) {
+//     next()
+//   } else {
+//     res.redirect('/admin/login')
+//   }
+// }
+
+
 router.get('/', function (req, res, next) {
   productHelper.getAllProducts().then((products) => {
     res.render('admin/view-products', { admin: true, products })
-
   })
+
 });
 
 router.get('/add-products', (req, res) => {

@@ -66,16 +66,13 @@
     function razorpayPayment(order) {
         var options = {
             "key": "rzp_test_kJb7IEObC39O4 ", // Enter the Key ID generated from the Dashboard
-            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "amount": order.amount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
             "name": Teach Cart, //your business name
             "description": "Test Transaction",
             "image": "https://example.com/your_logo",
             "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response) {
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature)
                 verifyPayment(response, order)
             },
             "prefill": {
