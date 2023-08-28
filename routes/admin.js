@@ -4,6 +4,7 @@ var router = express.Router();
 var productHelper = require('../helper/product-helper');
 const userHelper = require('../helper/user-helper');
 const { resolve } = require('promise');
+const async = require('hbs/lib/async');
 
 
 /* GET users listing .*/

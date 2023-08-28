@@ -1,13 +1,24 @@
 <section>
+    {{!-- <div class="container" style="padding:1.5rem; font-size: 16px; width: 20%;">
+        <form>
+            <i class="fas fa-search"></i>
+            <input type="text" name="" id="search-item" placeholder="Search products">
+        </form>
+    </div> --}}
     <div class="container">
+        <form>
+            <i class="fas fa-search"></i>
+            <input class="text mt-3" name="" id="search-item" placeholder="Search products"
+                style="width: 30%; font-size: 16px;" onkeyup="searchClick()">
+        </form>
         <div class="row">
             {{#each products}}
-            <div class="col-md-3 mt-5">
+            <div class="col-md-3 mt-3">
                 <div class="card" style="width: 15rem; height:21rem; align-items: center;">
                     <img class="card-img-top" src="/product-image/{{this._id}}.jpg" alt="Card image cap"
                         style="width: 12rem; height: 9rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{this.Name}}</h5>
+                    <div class="">
+                        <h5 class="">{{this.Name}}</h5>
                         <h6 class="card-title">Price {{this.Price}}$</h6>
                         <p class="card-text">{{this.Description}}.</p>
                         <button class="btn btn-primary" onclick="addToCart('{{this._id}}')" id="cart-count">Add
@@ -19,3 +30,25 @@
         </div>
     </div>
 </section>
+
+{{!--
+<script>
+    searchClick = () => {
+        const search = document.getElementById("search-item").value.toUpperCase();
+        const storeitems = pro
+        const product = document.querySelectorAll(".product")
+        const pname = document.getElementsByTagName("h5")
+
+        for (var i = 0; i < pname.length; i++) {
+            let match = product[i].getElementsByTagName('h5')[0];
+            if (match) {
+                let textvalue = match.textContent || match.innerHTML
+                if (textvalue.toLocaleUpperCase().indexOf(searchbox) > -1) {
+                    product[i].style.display = ""
+                } else {
+                    product[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script> --}}
